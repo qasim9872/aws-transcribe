@@ -4,16 +4,14 @@ import { createPresignedURL } from "aws-signature-v4"
 import crypto from "crypto"
 import { StreamingClient } from "./StreamingClient"
 
-// get from environment if available
-const accessKeyId = process.env.AWS_ACCESS_KEY_ID
-const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY
-
 export class AwsTranscribe {
     private accessKeyId!: string
     private secretAccessKey!: string
 
-    constructor(config: ClientConfig) {
-        this.setConfig(config)
+    constructor(config?: ClientConfig) {
+        // get from environment if config not provided
+        this.setAccessKeyId(config?.accessKeyId || process.env.AWS_ACCESS_KEY_ID)
+        this.setSecretAccessKey(config?.secretAccessKey || process.env.AWS_SECRET_ACCESS_KEY)
     }
 
     private createPreSignedUrl(config: TranscribeStreamConfig) {
@@ -29,7 +27,6 @@ export class AwsTranscribe {
             {
                 key: this.accessKeyId,
                 secret: this.secretAccessKey,
-                // sessionToken: $("#session_token").val(),
                 protocol: "wss",
                 expires: 15,
                 region: region,
@@ -41,11 +38,6 @@ export class AwsTranscribe {
     createStreamingClient(config: TranscribeStreamConfig) {
         const url = this.createPreSignedUrl(config)
         return new StreamingClient(url)
-    }
-
-    setConfig(config: ClientConfig) {
-        this.setAccessKeyId(config.accessKeyId || accessKeyId)
-        this.setSecretAccessKey(config.secretAccessKey || secretAccessKey)
     }
 
     setAccessKeyId(accessKeyId: string | undefined) {
