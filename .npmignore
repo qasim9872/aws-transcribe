@@ -1,12 +1,17 @@
 tsconfig.json
+Readme.md
+nodemon.json
+jest.config.js
+.prettierrc
+.gitignore
+.eslintrcjs
+.eslintignore
+.editorconfig
 .npmignore
-
 .vscode/
 coverage/
 src/
 docs/
-
-jest.config.js
 
 // npm pack
 {YOUR_LIB}-*.tgz
