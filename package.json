@@ -1,6 +1,6 @@
 {
     "name": "aws-transcribe",
-    "version": "1.0.0",
+    "version": "0.0.0",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
     "scripts": {
@@ -13,7 +13,9 @@
         "test": "jest",
         "test:watch": "jest --watchAll",
         "staged-test": "npm run test -- --bail --findRelatedTests",
-        "release": "standard-version",
+        "versioning": "standard-version",
+        "post-versioning": "git push --follow-tags origin master",
+        "release": "np",
         "clean:dist": "shx rm -rf dist/",
         "clean": "npm run clean:dist && shx rm -rf node_modules/  coverage/",
         "pretty-base": "prettier '**/*.{ts, js, json}'",
@@ -56,6 +58,7 @@
         "mock-socket": "^9.0.3",
         "node-record-lpcm16": "^1.0.1",
         "nodemon": "^2.0.2",
+        "np": "^6.2.0",
         "prettier": "^2.0.2",
         "shx": "^0.3.2",
         "standard-version": "^7.1.0",
@@ -89,5 +92,8 @@
         "skip": {
             "changelog": true
         }
+    },
+    "np": {
+        "yarn": false
     }
 }
