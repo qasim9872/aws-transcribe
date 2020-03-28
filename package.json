@@ -13,7 +13,7 @@
         "test": "jest",
         "test:watch": "jest --watchAll",
         "staged-test": "npm run test -- --bail --findRelatedTests",
-        "precommit": "npm run test",
+        "release": "standard-version",
         "clean:dist": "shx rm -rf dist/",
         "clean": "npm run clean:dist && shx rm -rf node_modules/  coverage/",
         "pretty-base": "prettier '**/*.{ts, js, json}'",
@@ -23,7 +23,22 @@
     },
     "author": "Muhammad Qasim <qasim9872@gmail.com>",
     "license": "MIT",
-    "keywords": [],
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/qasim9872/aws-transcribe"
+    },
+    "keywords": [
+        "amazon",
+        "aws",
+        "transcribe",
+        "speech",
+        "transcription",
+        "websocket"
+    ],
+    "bugs": {
+        "url": "https://github.com/qasim9872/aws-transcribe/issues"
+    },
+    "homepage": "https://github.com/qasim9872/aws-transcribe#readme",
     "devDependencies": {
         "@types/debug": "^4.1.5",
         "@types/jest": "^25.1.4",
@@ -43,6 +58,7 @@
         "nodemon": "^2.0.2",
         "prettier": "^2.0.2",
         "shx": "^0.3.2",
+        "standard-version": "^7.1.0",
         "ts-jest": "^25.2.1",
         "ts-node": "^8.8.1",
         "typedoc": "^0.17.3",
@@ -67,6 +83,11 @@
     "husky": {
         "hooks": {
             "pre-commit": "npm test"
+        }
+    },
+    "standard-version": {
+        "skip": {
+            "changelog": true
         }
     }
 }
