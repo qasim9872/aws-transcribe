@@ -1,0 +1,12 @@
+tsconfig.json
+.npmignore
+
+.vscode/
+coverage/
+src/
+docs/
+
+jest.config.js
+
+// npm pack
+{YOUR_LIB}-*.tgz
