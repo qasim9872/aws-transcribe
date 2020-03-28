@@ -10,6 +10,7 @@
         "dev": "nodemon",
         "debug": "DEBUG=aws-transcribe:* nodemon",
         "test": "jest",
+        "test:watch": "jest --watchAll",
         "staged-test": "npm run test -- --bail --findRelatedTests",
         "precommit": "npm run test",
         "clean:dist": "shx rm -rf dist/",

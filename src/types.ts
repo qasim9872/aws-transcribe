@@ -56,3 +56,17 @@ export interface PresignedUrlOptions {
     expires: number
     query: string
 }
+
+export interface AwsEventMessage {
+    headers: {
+        ":message-type": {
+            type: string
+            value: string
+        }
+        ":event-type": {
+            type: string
+            value: string
+        }
+    }
+    body: Buffer
+}

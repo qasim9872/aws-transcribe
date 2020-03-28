@@ -1,1 +1,0 @@
-import { AwsTranscribe } from "../index"
