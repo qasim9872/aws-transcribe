@@ -14,7 +14,7 @@ export function createDebugger(filePath: string) {
  * @description wrap the audio data in a JSON envelope for AWS
  * @param buffer - buffer to use as the message body
  */
-export function getAwsEventMessage(buffer: Buffer, eventType = "AudioEvent") {
+export function getAwsEventMessage(buffer: Buffer) {
     return {
         headers: {
             ":message-type": {
@@ -23,7 +23,7 @@ export function getAwsEventMessage(buffer: Buffer, eventType = "AudioEvent") {
             },
             ":event-type": {
                 type: "string",
-                value: eventType,
+                value: "AudioEvent",
             },
         },
         body: buffer,

@@ -4,11 +4,14 @@ import WsServer from "jest-websocket-mock"
 import { StreamingClient } from "../index"
 import { TranscribeException } from "../TranscribeException"
 import {
-    getBinaryException,
     getBinaryEvent,
+    getReadableStream,
+    getBinaryException,
+    getObjectFromBinary,
     createBodyForTranscriptionEvent,
     createBodyForExceptionEvent,
 } from "./utils"
+import { mocked } from "ts-jest/utils"
 
 function waitForEvent(event: string, streamClient: StreamingClient): Promise<any> {
     return new Promise((resolve) => {
@@ -31,6 +34,7 @@ describe("StreamingClient", () => {
 
     describe("new StreamingClient()", () => {
         let client: StreamingClient
+
         beforeEach(() => {
             client = new StreamingClient(url)
         })
@@ -115,6 +119,51 @@ describe("StreamingClient", () => {
                     })
                     // call the _onmessage directly since the mock-socket doesn't seem to handle the binary data properly
                     client["_onmessage"](message)
+                })
+            })
+
+            describe("sending data", () => {
+                it(`should wrap data that's coming on the stream and send it using the websocket`, (done) => {
+                    const stream = getReadableStream(true)
+                    const audioBuffer = Buffer.alloc(500).fill(0xff)
+                    const ws = client["ws"]
+
+                    ws.readyState = 1
+                    ws.send = jest.fn()
+                    const mockedSend = mocked(ws.send, true)
+
+                    stream.pipe(client)
+                    stream.push(audioBuffer)
+
+                    // add delay before checking so the stream is able to trigger the write function
+                    setTimeout(() => {
+                        expect(ws.send).toBeCalled()
+                        const binary = mockedSend.mock.calls[0][0]
+                        const data = getObjectFromBinary(binary)
+                        expect(data.headers).toEqual({
+                            ":event-type": {
+                                type: "string",
+                                value: "AudioEvent",
+                            },
+                            ":message-type": {
+                                type: "string",
+                                value: "event",
+                            },
+                        })
+                        done()
+                    }, 1000)
+                })
+            })
+
+            describe("destroy()", () => {
+                it(`should close the ws connection`, () => {
+                    const ws = client["ws"]
+                    ws.close = jest.fn()
+                    ws.removeAllListeners = jest.fn()
+                    const mockedClose = mocked(ws.close, true)
+
+                    client.destroy()
+                    expect(mockedClose).toBeCalled()
                 })
             })
         })

@@ -1,9 +1,10 @@
 module.exports = {
     testEnvironment: "node",
     modulePaths: ["src"],
+    roots: ["<rootDir>/src"],
     collectCoverage: true,
     collectCoverageFrom: ["src/**/*.ts"],
-    coveragePathIgnorePatterns: ["/node_modules/", "./src/aws-signature-v4"],
+    coveragePathIgnorePatterns: ["/node_modules/", "./src/aws-signature-v4", "./src/__tests__/utils.ts"],
     coverageDirectory: "<rootDir>/coverage",
     coverageThreshold: {
         global: {

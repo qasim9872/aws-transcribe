@@ -1,5 +1,6 @@
 import { TextEncoder } from "util"
 import { eventStreamMarshaller } from "../aws-message-utils"
+import { Readable } from "stream"
 
 const encoder = new TextEncoder()
 
@@ -66,4 +67,19 @@ export function createBodyForTranscriptionEvent(transcript: string, isPartial: b
             ],
         },
     }
+}
+
+export function getReadableStream(implementMethods = false) {
+    const stream = new Readable()
+
+    if (implementMethods) {
+        // eslint-disable-next-line @typescript-eslint/no-empty-function
+        stream._read = () => {}
+    }
+
+    return stream
+}
+
+export function getObjectFromBinary(message: any) {
+    return eventStreamMarshaller.unmarshall(message as any)
 }
