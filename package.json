@@ -6,7 +6,8 @@
     "scripts": {
         "build": "tsc",
         "build:watch": "tsc --watch",
-        "dev": "DEBUG=aws-transcribe:* nodemon",
+        "dev": "nodemon",
+        "debug": "DEBUG=aws-transcribe:* nodemon",
         "test": "jest",
         "staged-test": "npm run test -- --bail --findRelatedTests",
         "precommit": "npm run test",

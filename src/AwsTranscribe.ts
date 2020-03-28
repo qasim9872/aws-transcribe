@@ -1,5 +1,5 @@
 import { ClientConfig, TranscribeStreamConfig } from "./types"
-import { isString } from "./validation"
+import { validateIsStringOtherwiseThrow } from "./validation"
 import { createPresignedURL } from "./aws-signature-v4"
 import crypto from "crypto"
 import { StreamingClient } from "./StreamingClient"
@@ -49,16 +49,14 @@ export class AwsTranscribe {
     }
 
     setAccessKeyId(accessKeyId: string | undefined) {
-        if (!isString(accessKeyId)) {
-            throw new Error(`invalid accessKeyId`)
+        if (validateIsStringOtherwiseThrow(accessKeyId, "accessKeyId")) {
+            this.accessKeyId = accessKeyId
         }
-        this.accessKeyId = accessKeyId
     }
 
     setSecretAccessKey(secretAccessKey: string | undefined) {
-        if (!isString(secretAccessKey)) {
-            throw new Error(`invalid secretAccessKey`)
+        if (validateIsStringOtherwiseThrow(secretAccessKey, "secretAccessKey")) {
+            this.secretAccessKey = secretAccessKey
         }
-        this.secretAccessKey = secretAccessKey
     }
 }
