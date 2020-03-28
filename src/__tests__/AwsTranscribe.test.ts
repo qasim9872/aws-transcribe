@@ -1,8 +1,8 @@
 jest.mock("../StreamingClient")
-jest.mock("aws-signature-v4")
+jest.mock("../aws-signature-v4")
 
 import { AwsTranscribe } from "../index"
-import { createPresignedURL } from "aws-signature-v4"
+import { createPresignedURL } from "../aws-signature-v4"
 
 import { mocked } from "ts-jest/utils"
 import { StreamingClient } from "../index"
