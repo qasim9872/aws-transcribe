@@ -3,16 +3,16 @@ jest.mock("debug")
 import { mocked } from "ts-jest/utils"
 import debug from "debug"
 import { AwsEventMessage } from "../types"
-import { getAudioEventMessage, createDebugger } from "../utils"
+import { getAwsEventMessage, createDebugger } from "../utils"
 
 const mockedDebug = mocked(debug, true)
 
-describe("getAudioEventMessage(buffer)", () => {
+describe("getAwsEventMessage(buffer)", () => {
     let buffer: Buffer
     let message: AwsEventMessage
     beforeEach(() => {
         buffer = Buffer.alloc(100).fill(0xff)
-        message = getAudioEventMessage(buffer)
+        message = getAwsEventMessage(buffer)
     })
 
     describe("Event Message", () => {

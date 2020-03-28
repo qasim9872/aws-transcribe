@@ -3,7 +3,7 @@ import { Writable } from "stream"
 
 import { createDebugger } from "./utils"
 import { TranscribeException } from "./TranscribeException"
-import { fromBinary, toBinary } from "./aws-utils"
+import { fromBinary, toBinary } from "./aws-message-utils"
 
 const debugLog = createDebugger(__filename)
 
@@ -56,11 +56,12 @@ export class StreamingClient extends Writable {
      */
     private _onmessage(message: any) {
         const { wrapper, body } = fromBinary(message)
-        debugLog(`messageBody: `, JSON.stringify(body))
+        debugLog(`wrapper: `, JSON.stringify(wrapper))
+        debugLog(`body: `, JSON.stringify(body))
 
         // message type is event and event type is TranscriptEvent
         if (wrapper.headers[":message-type"].value === "event") {
-            const eventType = wrapper.headers[":event-type"]
+            const eventType = wrapper.headers[":event-type"].value
             debugLog(`${eventType}: `, body)
             this.emit(StreamingClient.EVENTS.DATA, body, eventType)
         } else {

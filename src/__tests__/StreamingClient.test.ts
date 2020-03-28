@@ -2,6 +2,13 @@ jest.mock("ws")
 
 import WsServer from "jest-websocket-mock"
 import { StreamingClient } from "../index"
+import { TranscribeException } from "../TranscribeException"
+import {
+    getBinaryException,
+    getBinaryEvent,
+    createBodyForTranscriptionEvent,
+    createBodyForExceptionEvent,
+} from "./utils"
 
 function waitForEvent(event: string, streamClient: StreamingClient): Promise<any> {
     return new Promise((resolve) => {
@@ -14,7 +21,7 @@ describe("StreamingClient", () => {
     let server: WsServer
 
     beforeEach(async () => {
-        server = new WsServer(url)
+        server = new WsServer(url, { jsonProtocol: false })
     })
 
     afterEach(() => {
@@ -62,6 +69,53 @@ describe("StreamingClient", () => {
                     expect(error.type).toBe("error")
                 })
                 server.error()
+            })
+
+            describe("on message event - should convert the message to json", () => {
+                it(`emit data event with json and event name`, (done) => {
+                    const body = createBodyForTranscriptionEvent(`a random transcription`, false)
+                    const event = "TranscriptionEvent"
+                    const message = getBinaryEvent(event, body)
+                    client.on(StreamingClient.EVENTS.DATA, (data, eventName) => {
+                        expect(data).toEqual(body)
+                        expect(eventName).toBe(event)
+                        done()
+                    })
+                    // call the _onmessage directly since the mock-socket doesn't seem to handle the binary data properly
+                    client["_onmessage"](message)
+                })
+
+                it(`emit error event with Custom error`, (done) => {
+                    const messageString = "bad request exception"
+                    const body = createBodyForExceptionEvent(messageString)
+                    const event = TranscribeException.EXCEPTION.BadRequestException
+                    const message = getBinaryException(event, body)
+                    client.on(StreamingClient.EVENTS.ERROR, (error: TranscribeException) => {
+                        expect(error).toBeDefined()
+                        expect(error.message).toBe(messageString)
+                        expect(error.type).toBe(event)
+                        expect(error.description).toBe(TranscribeException.EXCEPTIONS_MAP.BadRequestException)
+                        done()
+                    })
+                    // call the _onmessage directly since the mock-socket doesn't seem to handle the binary data properly
+                    client["_onmessage"](message)
+                })
+
+                it(`emit error event with Custom error and default description if type is not known`, (done) => {
+                    const messageString = "unknown request exception"
+                    const body = createBodyForExceptionEvent(messageString)
+                    const event = "unknown error"
+                    const message = getBinaryException(event, body)
+                    client.on(StreamingClient.EVENTS.ERROR, (error: TranscribeException) => {
+                        expect(error).toBeDefined()
+                        expect(error.message).toBe(messageString)
+                        expect(error.type).toBe(event)
+                        expect(error.description).toBe("no description available for this exception type")
+                        done()
+                    })
+                    // call the _onmessage directly since the mock-socket doesn't seem to handle the binary data properly
+                    client["_onmessage"](message)
+                })
             })
         })
     })

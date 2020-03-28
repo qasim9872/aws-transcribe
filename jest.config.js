@@ -16,7 +16,7 @@ module.exports = {
     transform: {
         "\\.(ts|tsx)": "ts-jest",
     },
-    testPathIgnorePatterns: ["/node_modules/", "./src/aws-signature-v4"],
+    testPathIgnorePatterns: ["/node_modules/", "./src/__tests__/utils.ts"],
     moduleFileExtensions: ["ts", "tsx", "js"],
     verbose: true,
 }
