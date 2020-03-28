@@ -1,6 +1,6 @@
 import { ClientConfig, TranscribeStreamConfig } from "./types"
 import { validateIsStringOtherwiseThrow } from "./validation"
-import { createPresignedURL } from "./aws-signature-v4"
+import { createPresignedURL } from "aws-signature-v4"
 import crypto from "crypto"
 import { StreamingClient } from "./StreamingClient"
 

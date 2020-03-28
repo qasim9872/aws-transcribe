@@ -3,7 +3,7 @@ module.exports = {
     modulePaths: ["src"],
     collectCoverage: true,
     collectCoverageFrom: ["src/**/*.ts"],
-    coveragePathIgnorePatterns: ["/node_modules/"],
+    coveragePathIgnorePatterns: ["/node_modules/", "/src/@types"],
     coverageDirectory: "<rootDir>/coverage",
     coverageThreshold: {
         global: {
@@ -16,7 +16,7 @@ module.exports = {
     transform: {
         "\\.(ts|tsx)": "ts-jest",
     },
-    testPathIgnorePatterns: ["/node_modules/", "/src/aws-signature-v4.ts"],
+    testPathIgnorePatterns: ["/node_modules/"],
     moduleFileExtensions: ["ts", "tsx", "js"],
     verbose: true,
 }
