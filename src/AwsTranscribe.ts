@@ -2,6 +2,7 @@ import { ClientConfig, TranscribeStreamConfig } from "./types"
 import { isString } from "./validation"
 import { createPresignedURL } from "./aws-signature-v4"
 import crypto from "crypto"
+import { StreamingClient } from "./StreamingClient"
 
 // get from environment if available
 const accessKeyId = process.env.AWS_ACCESS_KEY_ID
@@ -15,7 +16,7 @@ export class AwsTranscribe {
         this.setConfig(config)
     }
 
-    createPreSignedUrl(config: TranscribeStreamConfig) {
+    private createPreSignedUrl(config: TranscribeStreamConfig) {
         const { region, languageCode, sampleRate } = config
         const endpoint = "transcribestreaming." + region + ".amazonaws.com:8443"
 
@@ -35,6 +36,11 @@ export class AwsTranscribe {
                 query: "language-code=" + languageCode + "&media-encoding=pcm&sample-rate=" + sampleRate,
             }
         )
+    }
+
+    createStreamingClient(config: TranscribeStreamConfig) {
+        const url = this.createPreSignedUrl(config)
+        return new StreamingClient(url)
     }
 
     setConfig(config: ClientConfig) {
