@@ -56,7 +56,7 @@ export class StreamingClient extends Writable {
     }
 
     /**
-     *
+     * @description handles the incoming binary messages from aws and emits the data event or error event
      * @param message
      */
     private _onmessage(message: any) {
@@ -69,7 +69,9 @@ export class StreamingClient extends Writable {
 
         // message type is event and event type is TranscriptEvent
         if (messageWrapper.headers[":message-type"].value === "event") {
-            debugLog(`event: `, messageBody)
+            const eventType = messageWrapper.headers[":event-type"]
+            debugLog(`${eventType}: `, messageBody)
+            this.emit(StreamingClient.EVENTS.DATA, messageBody, eventType)
         } else {
             // message type is exception
             // exception type is supposed to be one from EXCEPTIONS

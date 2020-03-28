@@ -5,13 +5,15 @@
     "types": "dist/index.d.ts",
     "scripts": {
         "build": "tsc",
+        "build:clean": "npm run clean:dist && tsc",
         "build:watch": "tsc --watch",
         "dev": "nodemon",
         "debug": "DEBUG=aws-transcribe:* nodemon",
         "test": "jest",
         "staged-test": "npm run test -- --bail --findRelatedTests",
         "precommit": "npm run test",
-        "clean": "shx rm -rf node_modules/ dist/ coverage/",
+        "clean:dist": "shx rm -rf dist/",
+        "clean": "npm run clean:dist && shx rm -rf node_modules/  coverage/",
         "pretty-base": "prettier '**/*.{ts, js, json}'",
         "format": "npm run pretty-base --write",
         "lint": "eslint --fix 'src/**/*.{ts,tsx}'"
