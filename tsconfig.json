@@ -9,14 +9,14 @@
         "strict": true, /* Enable all strict type-checking options. */
         "esModuleInterop": true, /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
         "forceConsistentCasingInFileNames": true, /* Disallow inconsistently-cased references to the same file. */
-        "noImplicitAny": true
     },
     "include": [
         "src/**/*"
     ],
     "exclude": [
         "node_modules",
-        "**/*.test.ts",
-        "**/*.spec.ts"
+        "./src/__tests__",
+        "./src/__mocks__",
+        "./src/examples",
     ]
 }
