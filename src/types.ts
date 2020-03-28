@@ -29,6 +29,34 @@ export interface TranscribeStreamConfig {
     sampleRate: number
 }
 
+export interface PresignedUrlHeaders {
+    [key: string]: any
+    Host: string
+}
+
+export interface PresignedUrlQuery {
+    [key: string]: any
+    "X-Amz-Algorithm"?: string
+    "X-Amz-Credential"?: string
+    "X-Amz-Date"?: string
+    "X-Amz-Expires"?: number
+    "X-Amz-SignedHeaders"?: string
+    "X-Amz-Signature"?: string
+    "X-Amz-Security-Token"?: string
+}
+
+export interface PresignedUrlOptions {
+    key: string
+    secret: string
+    sessionToken?: string
+    protocol: string
+    headers?: PresignedUrlHeaders
+    timestamp?: number
+    region: AVAILABLE_REGIONS
+    expires: number
+    query: string
+}
+
 export interface AwsEventMessage {
     headers: {
         ":message-type": {

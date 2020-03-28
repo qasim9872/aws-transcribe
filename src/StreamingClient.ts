@@ -1,16 +1,11 @@
 import WebSocket from "ws"
 import { Writable } from "stream"
 
-import { EventStreamMarshaller } from "@aws-sdk/eventstream-marshaller" // for converting binary event stream messages to and from JSON
-import { toUtf8, fromUtf8 } from "@aws-sdk/util-utf8-node" // utilities for encoding and decoding UTF8
-import { TextDecoder } from "util"
-import { createDebugger, getAudioEventMessage } from "./utils"
+import { createDebugger } from "./utils"
 import { TranscribeException } from "./TranscribeException"
+import { fromBinary, toBinary } from "./aws-utils"
 
 const debugLog = createDebugger(__filename)
-// our converter between binary event streams messages and JSON
-const eventStreamMarshaller = new EventStreamMarshaller(toUtf8, fromUtf8)
-const decoder = new TextDecoder("utf-8")
 
 enum STREAM_EVENTS {
     OPEN = "open",
@@ -60,23 +55,19 @@ export class StreamingClient extends Writable {
      * @param message
      */
     private _onmessage(message: any) {
-        // convert the binary event stream message to JSON
-        const messageWrapper = eventStreamMarshaller.unmarshall(Buffer.from(message))
-
-        // eslint-disable-next-line prefer-spread
-        const messageBody = JSON.parse(decoder.decode(messageWrapper.body))
-        debugLog(`messageBody: `, JSON.stringify(messageBody))
+        const { wrapper, body } = fromBinary(message)
+        debugLog(`messageBody: `, JSON.stringify(body))
 
         // message type is event and event type is TranscriptEvent
-        if (messageWrapper.headers[":message-type"].value === "event") {
-            const eventType = messageWrapper.headers[":event-type"]
-            debugLog(`${eventType}: `, messageBody)
-            this.emit(StreamingClient.EVENTS.DATA, messageBody, eventType)
+        if (wrapper.headers[":message-type"].value === "event") {
+            const eventType = wrapper.headers[":event-type"]
+            debugLog(`${eventType}: `, body)
+            this.emit(StreamingClient.EVENTS.DATA, body, eventType)
         } else {
             // message type is exception
             // exception type is supposed to be one from EXCEPTIONS
-            const exceptionType = messageWrapper.headers[":exception-type"].value as string
-            const exceptionMessage = messageBody.Message
+            const exceptionType = wrapper.headers[":exception-type"].value as string
+            const exceptionMessage = body.Message
             this.handleException(new TranscribeException(exceptionType, exceptionMessage), "exception")
         }
     }
@@ -108,11 +99,7 @@ export class StreamingClient extends Writable {
      * @param cb - to be triggered after processing the message
      */
     _write(chunk: any, _: string, cb: any) {
-        // add the right JSON headers and structure to the message
-        const audioEventMessage = getAudioEventMessage(Buffer.from(chunk))
-
-        // convert the JSON object + headers into a binary event stream message
-        const binary = eventStreamMarshaller.marshall(audioEventMessage as any)
+        const binary = toBinary(chunk)
 
         this.ws.readyState === 1 && this.ws.send(binary)
         cb()

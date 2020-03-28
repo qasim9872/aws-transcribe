@@ -47,9 +47,9 @@
     "dependencies": {
         "@aws-sdk/eventstream-marshaller": "0.1.0-preview.2",
         "@aws-sdk/util-utf8-node": "0.1.0-preview.1",
-        "aws-signature-v4": "^1.4.0",
         "crypto": "^1.0.1",
         "debug": "^4.1.1",
+        "query-string": "^6.11.1",
         "ws": "^7.2.3"
     },
     "lint-staged": {
