@@ -4,7 +4,7 @@ nodemon.json
 jest.config.js
 .prettierrc
 .gitignore
-.eslintrcjs
+.eslintrc.js
 .eslintignore
 .editorconfig
 .npmignore

@@ -40,7 +40,7 @@ const transcribeStream = client
     // enums for returning the event names which the stream will emit
     .on(StreamingClient.EVENTS.OPEN, () => console.log(`transcribe connection opened`))
     .on(StreamingClient.EVENTS.ERROR, console.error)
-    .on(StreamingClient.EVENTS.CLOSE, () => console.log(`transcribe connection opened`))
+    .on(StreamingClient.EVENTS.CLOSE, () => console.log(`transcribe connection closed`))
     .on(StreamingClient.EVENTS.DATA, (data) => {
         const results = data.Transcript.Results
 
