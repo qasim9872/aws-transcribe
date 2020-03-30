@@ -15,7 +15,7 @@
         "staged-test": "npm run test -- --bail --findRelatedTests",
         "versioning": "standard-version",
         "post-versioning": "git push --follow-tags origin master",
-        "release": "np",
+        "release": "npm run build:clean && np",
         "clean:dist": "shx rm -rf dist/",
         "clean": "npm run clean:dist && shx rm -rf node_modules/  coverage/",
         "pretty-base": "prettier '**/*.{ts, js, json}'",
