@@ -21,6 +21,7 @@ export type LANGUAGES = "en-US" | "en-AU" | "en-GB" | "fr-CA" | "fr-FR" | "es-US
 export interface ClientConfig {
     accessKeyId?: string
     secretAccessKey?: string
+    sessionToken?: string
 }
 
 export interface TranscribeStreamConfig {
