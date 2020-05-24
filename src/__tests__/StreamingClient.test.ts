@@ -1,7 +1,7 @@
 jest.mock("ws")
 
 import WsServer from "jest-websocket-mock"
-import { StreamingClient } from "../index"
+import { StreamingClient, TranscriptEvent } from "../index"
 import { TranscribeException } from "../TranscribeException"
 import {
     getBinaryEvent,
@@ -80,7 +80,7 @@ describe("StreamingClient", () => {
                     const body = createBodyForTranscriptionEvent(`a random transcription`, false)
                     const event = "TranscriptionEvent"
                     const message = getBinaryEvent(event, body)
-                    client.on(StreamingClient.EVENTS.DATA, (data, eventName) => {
+                    client.on(StreamingClient.EVENTS.DATA, (data: TranscriptEvent, eventName: string) => {
                         expect(data).toEqual(body)
                         expect(eventName).toBe(event)
                         done()

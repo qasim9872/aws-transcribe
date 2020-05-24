@@ -12,7 +12,7 @@ With YARN install the module with: `yarn add aws-transcribe`
 An example of streaming from microphone can be found in src/examples/stream-from-microphone.ts
 
 ```typescript
-import { AwsTranscribe, StreamingClient } from "aws-transcribe"
+import { AwsTranscribe, StreamingClient, TranscriptEvent } from "aws-transcribe"
 
 const client = new AwsTranscribe({
     // if these aren't provided, they will be taken from the environment
@@ -30,7 +30,7 @@ const transcribeStream = client
     .on(StreamingClient.EVENTS.OPEN, () => console.log(`transcribe connection opened`))
     .on(StreamingClient.EVENTS.ERROR, console.error)
     .on(StreamingClient.EVENTS.CLOSE, () => console.log(`transcribe connection closed`))
-    .on(StreamingClient.EVENTS.DATA, (data) => {
+    .on(StreamingClient.EVENTS.DATA, (data: TranscriptEvent) => {
         const results = data.Transcript.Results
 
         if (!results || results.length === 0) {

@@ -1,4 +1,4 @@
-import { AwsTranscribe, StreamingClient } from "../index"
+import { AwsTranscribe, StreamingClient, TranscriptEvent } from "../index"
 
 // eslint-disable-next-line @typescript-eslint/no-var-requires
 const recorder = require("node-record-lpcm16")
@@ -41,7 +41,7 @@ const transcribeStream = client
     .on(StreamingClient.EVENTS.OPEN, () => console.log(`transcribe connection opened`))
     .on(StreamingClient.EVENTS.ERROR, console.error)
     .on(StreamingClient.EVENTS.CLOSE, () => console.log(`transcribe connection closed`))
-    .on(StreamingClient.EVENTS.DATA, (data) => {
+    .on(StreamingClient.EVENTS.DATA, (data: TranscriptEvent) => {
         const results = data.Transcript.Results
 
         if (!results || results.length === 0) {

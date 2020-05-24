@@ -4,6 +4,7 @@ import { Writable } from "stream"
 import { createDebugger } from "./utils"
 import { TranscribeException } from "./TranscribeException"
 import { fromBinary, toBinary } from "./aws-message-utils"
+import { TranscriptEvent } from ".";
 
 const debugLog = createDebugger(__filename)
 
@@ -63,7 +64,7 @@ export class StreamingClient extends Writable {
         if (wrapper.headers[":message-type"].value === "event") {
             const eventType = wrapper.headers[":event-type"].value
             debugLog(`${eventType}: `, body)
-            this.emit(StreamingClient.EVENTS.DATA, body, eventType)
+            this.emit(StreamingClient.EVENTS.DATA, body as TranscriptEvent, eventType)
         } else {
             // message type is exception
             // exception type is supposed to be one from EXCEPTIONS
