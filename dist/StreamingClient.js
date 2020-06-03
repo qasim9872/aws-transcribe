@@ -13,6 +13,7 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.StreamingClient = void 0;
 var stream_1 = require("stream");
 var utils_1 = require("./utils");
 var TranscribeException_1 = require("./TranscribeException");

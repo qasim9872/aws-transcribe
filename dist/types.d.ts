@@ -1,6 +1,8 @@
 /// <reference types="node" />
 export declare type AVAILABLE_REGIONS = "us-east-1" | "us-east-2" | "us-west-2" | "ap-southeast-2" | "ca-central-1" | "eu-west-1";
 export declare type LANGUAGES = "en-US" | "en-AU" | "en-GB" | "fr-CA" | "fr-FR" | "es-US";
+export declare type SPECIALTY = "PRIMARYCARE";
+export declare type TYPE = "CONVERSATION" | "DICTATION";
 export interface ClientConfig {
     accessKeyId?: string;
     secretAccessKey?: string;
@@ -9,6 +11,8 @@ export interface TranscribeStreamConfig {
     region: AVAILABLE_REGIONS;
     languageCode: LANGUAGES;
     sampleRate: number;
+    specialty?: SPECIALTY;
+    type?: TYPE;
 }
 export interface PresignedUrlHeaders {
     [key: string]: any;

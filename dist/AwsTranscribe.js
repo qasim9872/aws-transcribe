@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.AwsTranscribe = void 0;
 var validation_1 = require("./validation");
 var aws_signature_v4_1 = require("./aws-signature-v4");
 var crypto_1 = __importDefault(require("crypto"));
@@ -15,13 +16,13 @@ var AwsTranscribe = (function () {
     AwsTranscribe.prototype.createPreSignedUrl = function (config) {
         var region = config.region, languageCode = config.languageCode, sampleRate = config.sampleRate;
         var endpoint = "transcribestreaming." + region + ".amazonaws.com:8443";
-        return aws_signature_v4_1.createPresignedURL("GET", endpoint, "/stream-transcription-websocket", "transcribe", crypto_1.default.createHash("sha256").update("", "utf8").digest("hex"), {
+        return aws_signature_v4_1.createPresignedURL("GET", endpoint, config.specialty ? "/medical-stream-transcription-websocket" : "/stream-transcription-websocket", "transcribe", crypto_1.default.createHash("sha256").update("", "utf8").digest("hex"), {
             key: this.accessKeyId,
             secret: this.secretAccessKey,
             protocol: "wss",
             expires: 15,
             region: region,
-            query: "language-code=" + languageCode + "&media-encoding=pcm&sample-rate=" + sampleRate,
+            query: "language-code=" + languageCode + "&media-encoding=pcm&sample-rate=" + sampleRate + (config.specialty ? ("&specialty=" + config.specialty) : "") + (config.type ? ("&type=" + config.type) : ""),
         });
     };
     AwsTranscribe.prototype.createStreamingClient = function (config) {

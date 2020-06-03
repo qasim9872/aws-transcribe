@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.createPresignedURL = exports.createSignature = exports.createStringToSign = exports.createCredentialScope = exports.createCanonicalRequest = exports.createSignedHeaders = exports.createCanonicalHeaders = exports.createCanonicalQueryString = void 0;
 var crypto_1 = __importDefault(require("crypto"));
 var query_string_1 = __importDefault(require("query-string"));
 function toTime(time) {
