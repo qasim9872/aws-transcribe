@@ -18,9 +18,9 @@
         "release": "npm run build:clean && np",
         "clean:dist": "shx rm -rf dist/",
         "clean": "npm run clean:dist && shx rm -rf node_modules/  coverage/",
-        "pretty-base": "prettier '**/*.{ts, js, json}'",
+        "pretty-base": "prettier \"**/*.{ts, js, json}\"",
         "format": "npm run pretty-base --write",
-        "lint": "eslint --fix 'src/**/*.{ts,tsx}'",
+        "lint": "eslint --fix \"src/**/*.{ts,tsx}\"",
         "typedoc": "typedoc --out ./docs --mode modules --tsconfig ./tsconfig.json ./src"
     },
     "author": "Muhammad Qasim <qasim9872@gmail.com>",
