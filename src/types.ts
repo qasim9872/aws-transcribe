@@ -73,27 +73,27 @@ export interface AwsEventMessage {
 }
 
 interface TranscribeItem {
-  Content: string,
-  EndTime: number,
-  StartTime: number,
-  Type: 'pronunciation' | 'punctuation'
-};
+    Content: string
+    EndTime: number
+    StartTime: number
+    Type: "pronunciation" | "punctuation"
+}
 
 interface TranscribeAlternative {
-  Items: Array<TranscribeItem>,
-  Transcript: string
-};
+    Items: TranscribeItem[]
+    Transcript: string
+}
 
 interface TranscribeResult {
-  Alternatives: Array<TranscribeAlternative>,
-  EndTime: number,
-  IsPartial: Boolean,
-  ResultId: string,
-  StartTime: number
-};
+    Alternatives: TranscribeAlternative[]
+    EndTime: number
+    IsPartial: boolean
+    ResultId: string
+    StartTime: number
+}
 
 export interface TranscriptEvent {
-  Transcript: {
-    Results: Array<TranscribeResult>
-  }
+    Transcript: {
+        Results: TranscribeResult[]
+    }
 }
