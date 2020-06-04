@@ -33,6 +33,7 @@ export interface TranscribeStreamConfig {
     sampleRate: number
     specialty?: SPECIALTY
     type?: TYPE
+    vocabularyName?: string
 }
 
 export interface PresignedUrlHeaders {

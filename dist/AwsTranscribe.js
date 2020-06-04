@@ -22,7 +22,7 @@ var AwsTranscribe = (function () {
             protocol: "wss",
             expires: 15,
             region: region,
-            query: "language-code=" + languageCode + "&media-encoding=pcm&sample-rate=" + sampleRate + (config.specialty ? ("&specialty=" + config.specialty) : "") + (config.type ? ("&type=" + config.type) : ""),
+            query: "language-code=" + languageCode + "&media-encoding=pcm&sample-rate=" + sampleRate + (config.specialty ? ("&specialty=" + config.specialty) : "") + (config.type ? ("&type=" + config.type) : "") + (config.vocabularyName ? ("&vocabulary-name=" + config.vocabularyName) : ""),
         });
     };
     AwsTranscribe.prototype.createStreamingClient = function (config) {
