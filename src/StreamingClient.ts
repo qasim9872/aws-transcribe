@@ -103,8 +103,7 @@ export class StreamingClient extends Writable {
     _write(chunk: any, _: string, cb: any) {
         const binary = toBinary(chunk)
 
-        this.ws.readyState === 1 && this.ws.send(binary)
-        cb()
+        this.ws.readyState === 1 && this.ws.send(binary, cb)
     }
 
     /**
