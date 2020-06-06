@@ -31,6 +31,7 @@ export class StreamingClient extends Writable {
         this.ws.on("message", this._onmessage.bind(this))
         this.ws.on("error", this._onerror.bind(this))
         this.ws.on("close", this._onclose.bind(this))
+        this.cork()
     }
 
     /**
@@ -39,6 +40,7 @@ export class StreamingClient extends Writable {
     private _onopen() {
         debugLog(`opened connection to aws transcribe`)
         this.emit(StreamingClient.EVENTS.OPEN)
+        this.uncork()
     }
 
     /**
