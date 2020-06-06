@@ -4,7 +4,7 @@ import { Writable } from "stream"
 import { createDebugger } from "./utils"
 import { TranscribeException } from "./TranscribeException"
 import { fromBinary, toBinary } from "./aws-message-utils"
-import { TranscriptEvent } from ".";
+import { TranscriptEvent } from "."
 
 const debugLog = createDebugger(__filename)
 
