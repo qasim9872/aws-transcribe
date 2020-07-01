@@ -40,11 +40,13 @@ var StreamingClient = (function (_super) {
         if (isBrowser) {
             _this.ws.binaryType = "arraybuffer";
         }
+        _this.cork();
         return _this;
     }
     StreamingClient.prototype._onopen = function () {
         debugLog("opened connection to aws transcribe");
         this.emit(StreamingClient.EVENTS.OPEN);
+        this.uncork();
     };
     StreamingClient.prototype.handleException = function (exception, type) {
         if (type === void 0) { type = "error"; }

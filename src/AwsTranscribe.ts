@@ -7,11 +7,13 @@ import { StreamingClient } from "./StreamingClient"
 export class AwsTranscribe {
     private accessKeyId!: string
     private secretAccessKey!: string
+    private sessionToken: string | undefined
 
     constructor(config?: ClientConfig) {
         // get from environment if config not provided
         this.setAccessKeyId(config?.accessKeyId || process.env.AWS_ACCESS_KEY_ID)
         this.setSecretAccessKey(config?.secretAccessKey || process.env.AWS_SECRET_ACCESS_KEY)
+        this.setSessionToken(config?.sessionToken || process.env.AWS_SESSION_TOKEN)
     }
 
     private createPreSignedUrl(config: TranscribeStreamConfig) {
@@ -27,6 +29,7 @@ export class AwsTranscribe {
             {
                 key: this.accessKeyId,
                 secret: this.secretAccessKey,
+                sessionToken: this.sessionToken,
                 protocol: "wss",
                 expires: 15,
                 region: region,
@@ -50,5 +53,9 @@ export class AwsTranscribe {
         if (validateIsStringOtherwiseThrow(secretAccessKey, "secretAccessKey")) {
             this.secretAccessKey = secretAccessKey
         }
+    }
+
+    setSessionToken(sessionToken: string | undefined) {
+      this.sessionToken = sessionToken
     }
 }
