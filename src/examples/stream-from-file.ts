@@ -1,7 +1,7 @@
+import * as fs from 'fs'
+import * as Throttle from 'throttle'
 import { AwsTranscribe, StreamingClient, TranscriptEvent } from "../index"
 
-// eslint-disable-next-line @typescript-eslint/no-var-requires
-const recorder = require("node-record-lpcm16")
 const sampleRate = 16000
 /**
  * You can run this file by running the npm script called example-stream-from-microphone
@@ -56,18 +56,9 @@ const transcribeStream = client
     })
 
 /******************************************************************************
- * Start the Recording
+ * Stream the file. It must be LINEAR16 with the given sample rate
  *******************************************************************************/
-recorder
-    .record({
-        sampleRateHertz: sampleRate,
-        threshold: 0, //silence threshold
-        recordProgram: "sox", // Try also "arecord" or "sox"
-        silence: "5.0", //seconds of silence before ending
-    })
-    .stream()
-    .on("error", console.error)
-    .pipe(transcribeStream)
+fs.createReadStream('test.wav').pipe(new Throttle(sampleRate * 2)).pipe(transcribeStream)
 
 /******************************************************************************
  * For closing the transcribe stream
