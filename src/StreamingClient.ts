@@ -1,10 +1,13 @@
-import WebSocket from "ws"
 import { Writable } from "stream"
-
 import { createDebugger } from "./utils"
 import { TranscribeException } from "./TranscribeException"
 import { fromBinary, toBinary } from "./aws-message-utils"
 import { TranscriptEvent } from "."
+
+const isBrowser = typeof window !== "undefined"
+// imported to access the type
+import NodeWebSocket from "ws"
+const WebSocket = isBrowser ? window.WebSocket : require("ws")
 
 const debugLog = createDebugger(__filename)
 
@@ -19,7 +22,7 @@ export class StreamingClient extends Writable {
     static EVENTS = STREAM_EVENTS
 
     private url: string
-    private ws: WebSocket
+    private ws: NodeWebSocket
 
     constructor(url: string) {
         super()
@@ -27,10 +30,14 @@ export class StreamingClient extends Writable {
         this.url = url
         this.ws = new WebSocket(this.url)
 
-        this.ws.on("open", this._onopen.bind(this))
-        this.ws.on("message", this._onmessage.bind(this))
-        this.ws.on("error", this._onerror.bind(this))
-        this.ws.on("close", this._onclose.bind(this))
+        this.ws.addEventListener("open", this._onopen.bind(this))
+        this.ws.addEventListener("message", this._onmessage.bind(this))
+        this.ws.addEventListener("error", this._onerror.bind(this))
+        this.ws.addEventListener("close", this._onclose.bind(this))
+
+        if (isBrowser) {
+            this.ws.binaryType = "arraybuffer"
+        }
         this.cork()
     }
 
@@ -57,7 +64,8 @@ export class StreamingClient extends Writable {
      * @description handles the incoming binary messages from aws and emits the data event or error event
      * @param message
      */
-    private _onmessage(message: any) {
+    private _onmessage(event: any) {
+        const message = event.data || event
         const { wrapper, body } = fromBinary(message)
         debugLog(`wrapper: `, JSON.stringify(wrapper))
         debugLog(`body: `, JSON.stringify(body))
@@ -80,7 +88,8 @@ export class StreamingClient extends Writable {
      * @description this will be called when an error occurs on the websocket
      * @param {*} error
      */
-    private _onerror(error: Error) {
+    private _onerror(event: any) {
+        const error = event.error
         debugLog("error occurred on aws transcribe connection", error)
         this.handleException(error)
     }
@@ -90,7 +99,9 @@ export class StreamingClient extends Writable {
      * @param {*} code - close code
      * @param {*} reason - reason for the close
      */
-    private _onclose(code: number, reason: string) {
+    private _onclose(event: any) {
+        const code = event.code
+        const reason = event.reason
         debugLog(`closed connection to aws transcribe`, { code, reason })
         this.emit(StreamingClient.EVENTS.CLOSE, code, reason)
     }
@@ -105,7 +116,8 @@ export class StreamingClient extends Writable {
     _write(chunk: any, _: string, cb: any) {
         const binary = toBinary(chunk)
 
-        this.ws.readyState === 1 && this.ws.send(binary, cb)
+        this.ws.readyState === 1 && this.ws.send(binary)
+        cb && cb()
     }
 
     /**
@@ -114,7 +126,7 @@ export class StreamingClient extends Writable {
     destroy() {
         super.destroy()
         if (this.ws) {
-            this.ws.removeAllListeners()
+            this.ws.removeAllListeners && this.ws.removeAllListeners()
             this.ws.readyState === 1 && this.ws.close(1000)
         }
     }
