@@ -4,6 +4,7 @@ export declare type LANGUAGES = "en-US" | "en-AU" | "en-GB" | "fr-CA" | "fr-FR" 
 export interface ClientConfig {
     accessKeyId?: string;
     secretAccessKey?: string;
+    sessionToken?: string;
 }
 export interface TranscribeStreamConfig {
     region: AVAILABLE_REGIONS;
@@ -48,3 +49,26 @@ export interface AwsEventMessage {
     };
     body: Buffer;
 }
+interface TranscribeItem {
+    Content: string;
+    EndTime: number;
+    StartTime: number;
+    Type: "pronunciation" | "punctuation";
+}
+interface TranscribeAlternative {
+    Items: TranscribeItem[];
+    Transcript: string;
+}
+interface TranscribeResult {
+    Alternatives: TranscribeAlternative[];
+    EndTime: number;
+    IsPartial: boolean;
+    ResultId: string;
+    StartTime: number;
+}
+export interface TranscriptEvent {
+    Transcript: {
+        Results: TranscribeResult[];
+    };
+}
+export {};
