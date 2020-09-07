@@ -22,12 +22,14 @@ export interface ClientConfig {
     accessKeyId?: string
     secretAccessKey?: string
     sessionToken?: string
+    showSpeakerLabel?: boolean
 }
 
 export interface TranscribeStreamConfig {
     region: AVAILABLE_REGIONS
     languageCode: LANGUAGES
     sampleRate: number
+    showSpeakerLabel?: boolean
 }
 
 export interface PresignedUrlHeaders {
