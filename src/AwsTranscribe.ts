@@ -17,8 +17,12 @@ export class AwsTranscribe {
     }
 
     private createPreSignedUrl(config: TranscribeStreamConfig) {
-        const { region, languageCode, sampleRate } = config
+        const { region, languageCode, sampleRate, showSpeakerLabel } = config
         const endpoint = "transcribestreaming." + region + ".amazonaws.com:8443"
+        let query = "language-code=" + languageCode + "&media-encoding=pcm&sample-rate=" + sampleRate
+        if (showSpeakerLabel) {
+          query += '&show-speaker-label=' + showSpeakerLabel
+        }
 
         return createPresignedURL(
             "GET",
@@ -33,7 +37,7 @@ export class AwsTranscribe {
                 protocol: "wss",
                 expires: 15,
                 region: region,
-                query: "language-code=" + languageCode + "&media-encoding=pcm&sample-rate=" + sampleRate,
+                query: query,
             }
         )
     }

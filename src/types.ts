@@ -28,6 +28,7 @@ export interface TranscribeStreamConfig {
     region: AVAILABLE_REGIONS
     languageCode: LANGUAGES
     sampleRate: number
+    showSpeakerLabel?: boolean
 }
 
 export interface PresignedUrlHeaders {
@@ -77,6 +78,7 @@ interface TranscribeItem {
     EndTime: number
     StartTime: number
     Type: "pronunciation" | "punctuation"
+    Speaker: string
 }
 
 interface TranscribeAlternative {
