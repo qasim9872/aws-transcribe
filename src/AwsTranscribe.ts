@@ -8,23 +8,21 @@ export class AwsTranscribe {
     private accessKeyId!: string
     private secretAccessKey!: string
     private sessionToken: string | undefined
-    private showSpeakerLabel?: boolean
 
     constructor(config?: ClientConfig) {
         // get from environment if config not provided
         this.setAccessKeyId(config?.accessKeyId || process.env.AWS_ACCESS_KEY_ID)
         this.setSecretAccessKey(config?.secretAccessKey || process.env.AWS_SECRET_ACCESS_KEY)
         this.setSessionToken(config?.sessionToken || process.env.AWS_SESSION_TOKEN)
-        this.setShowSpeakerLabel(config?.showSpeakerLabel || false)
     }
 
     private createPreSignedUrl(config: TranscribeStreamConfig) {
         const { region, languageCode, sampleRate, showSpeakerLabel } = config
         const endpoint = "transcribestreaming." + region + ".amazonaws.com:8443"
-	let query = "language-code=" + languageCode + "&media-encoding=pcm&sample-rate=" + sampleRate
-	if (showSpeakerLabel) {
-	    query += '&show-speaker-label=true'
-	}
+        let query = "language-code=" + languageCode + "&media-encoding=pcm&sample-rate=" + sampleRate
+        if (showSpeakerLabel) {
+          query += '&show-speaker-label=' + showSpeakerLabel
+        }
 
         return createPresignedURL(
             "GET",
@@ -39,7 +37,7 @@ export class AwsTranscribe {
                 protocol: "wss",
                 expires: 15,
                 region: region,
-                query: query
+                query: query,
             }
         )
     }
@@ -63,9 +61,5 @@ export class AwsTranscribe {
 
     setSessionToken(sessionToken: string | undefined) {
       this.sessionToken = sessionToken
-    }
-
-    setShowSpeakerLabel(showSpeakerLabel: boolean | false) {
-        this.showSpeakerLabel = showSpeakerLabel
     }
 }

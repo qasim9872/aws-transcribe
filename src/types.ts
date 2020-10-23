@@ -22,7 +22,6 @@ export interface ClientConfig {
     accessKeyId?: string
     secretAccessKey?: string
     sessionToken?: string
-    showSpeakerLabel?: boolean
 }
 
 export interface TranscribeStreamConfig {
@@ -79,6 +78,7 @@ interface TranscribeItem {
     EndTime: number
     StartTime: number
     Type: "pronunciation" | "punctuation"
+    Speaker: string
 }
 
 interface TranscribeAlternative {
