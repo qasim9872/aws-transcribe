@@ -21,7 +21,7 @@ export class AwsTranscribe {
         return createPresignedURL(
             "GET",
             endpoint,
-            "/stream-transcription-websocket",
+            config.specialty ? "/medical-stream-transcription-websocket" : "/stream-transcription-websocket",
             "transcribe",
             crypto.createHash("sha256").update("", "utf8").digest("hex"),
             {
@@ -30,7 +30,7 @@ export class AwsTranscribe {
                 protocol: "wss",
                 expires: 15,
                 region: region,
-                query: "language-code=" + languageCode + "&media-encoding=pcm&sample-rate=" + sampleRate,
+                query: "language-code=" + languageCode + "&media-encoding=pcm&sample-rate=" + sampleRate + (config.specialty ? ("&specialty=" + config.specialty) : "") + (config.type ? ("&type=" + config.type) : "") + (config.vocabularyName ? ("&vocabulary-name=" + config.vocabularyName) : ""),
             }
         )
     }

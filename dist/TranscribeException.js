@@ -14,6 +14,7 @@ var __extends = (this && this.__extends) || (function () {
 })();
 var _a;
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.TranscribeException = void 0;
 var EXCEPTION;
 (function (EXCEPTION) {
     EXCEPTION["BadRequestException"] = "BadRequestException";

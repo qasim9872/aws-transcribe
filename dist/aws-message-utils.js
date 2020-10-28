@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.toBinary = exports.fromBinary = exports.eventStreamMarshaller = void 0;
 var eventstream_marshaller_1 = require("@aws-sdk/eventstream-marshaller");
 var util_utf8_node_1 = require("@aws-sdk/util-utf8-node");
 var utils_1 = require("./utils");
