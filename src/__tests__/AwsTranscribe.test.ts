@@ -124,6 +124,27 @@ describe("AwsTranscribe", () => {
             })
         })
 
+        it(`should include show-speaker-label parameter when given`, () => {
+          const region = "us-east-1"
+          const sampleRate = 8000
+          const languageCode = "en-GB"
+          const showSpeakerLabel = true
+
+          client.createStreamingClient({
+            region,
+            sampleRate,
+            languageCode,
+            showSpeakerLabel,
+          })
+
+          expect(mockedCreatePresignedURL).toBeCalled()
+          const args = mockedCreatePresignedURL.mock.calls[0]
+          const options = args[5]
+          const query = options.query
+
+          expect(query).toBe(`language-code=${languageCode}&media-encoding=pcm&sample-rate=${sampleRate}&show-speaker-label=true`)
+        })
+
         it(`should create and return an instance of Streaming client with the pre signed url`, () => {
             const region = "us-east-1"
             const sampleRate = 8000

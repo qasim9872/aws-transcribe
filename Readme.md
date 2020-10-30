@@ -4,7 +4,7 @@ A client for Amazon Transcribe using the websocket interface
 
 ## Getting Started
 
-With NPM install the module with: `npm install aws-transcribe --save`  
+With NPM install the module with: `npm install aws-transcribe --save`
 With YARN install the module with: `yarn add aws-transcribe`
 
 ## Example
@@ -67,6 +67,10 @@ The `transcribeStreamConfig` is required and must have the following properties:
 -   `region` must be one of "us-east-1", "us-east-2", "us-west-2", "ap-southeast-2", "ca-central-1", "eu-west-1"
 -   `languageCode` must be one of "en-US", "en-AU", "en-GB", "fr-CA", "fr-FR", "es-US"
 -   `sampleRate` must be between 8000 and 44100 - the supported sample rate differs depending on the language code being used. For more information, go [here](https://docs.aws.amazon.com/transcribe/latest/dg/streaming.html)
+
+It may also optionally include:
+
+-   `showSpeakerLabel` - when `true`, [speaker identification](https://docs.aws.amazon.com/transcribe/latest/dg/diarization-streaming.html) will be enabled
 
 ### StreamingClient EVENTS
 
