@@ -2,6 +2,8 @@
 
 A client for Amazon Transcribe using the websocket interface
 
+> **_WARNING:_** This module is now deprecated and will no longer be maintained. Please use the official package provided by amazon, it can be found [here](https://www.npmjs.com/package/@aws-sdk/client-transcribe)
+
 ## Getting Started
 
 With NPM install the module with: `npm install aws-transcribe --save`
